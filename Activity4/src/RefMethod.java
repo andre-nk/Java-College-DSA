@@ -97,7 +97,7 @@ public class RefMethod {
     };
 
     //#1. Pemanggilan getSum()
-    System.out.println("Jumlah dari arrayOfDouble: " + getSum(arrayOfDouble));
+    System.out.println("Jumlah dari arrayOfDouble:" + getSum(arrayOfDouble));
 
     //#2. Pemanggilan getAverage()
     System.out.println(

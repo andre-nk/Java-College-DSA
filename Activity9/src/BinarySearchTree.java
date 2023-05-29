@@ -18,11 +18,11 @@ public class BinarySearchTree {
         return; //stop insertion since data is exist
       } else if (result < 0) { //data < p.data
         parent = p;
-        isLeftChild = false;
+        isLeftChild = true;
         p = p.left; //shift left
       } else { //data > p.data
         parent = p;
-        isLeftChild = true;
+        isLeftChild = false;
         p = p.right; //shift right
       }
     }
@@ -41,7 +41,7 @@ public class BinarySearchTree {
     BinarySearchNode p = root;
 
     while (p != null) {
-      int result = data.compareTo(data);
+      int result = data.compareTo(p.data);
       if (result == 0) {
         System.out.println(data + " is found");
         return;
@@ -62,21 +62,19 @@ public class BinarySearchTree {
 
     while (p != null) {
       int result = data.compareTo(p.data);
-      if (result == 0) { //data is found
-        if (p.left == null && p.right == null) { //external
+      if (result == 0) { // data is found
+        if (p.left == null && p.right == null) { // external
           if (parent == null) {
-            root = null; //delete root (the only node in BST)
+            root = null; // delete root (the only node in BST)
           } else if (isLeftChild) {
-            parent.left = null; //delete left child of parent x
+            parent.left = null; // delete left child of parent x
           } else {
             parent.right = null;
           }
-        } else if (p.left == null) { //Parent X only has right node
+        } else if (p.left == null) { // Parent X only has right node
           if (parent == null) {
             root = p.right;
-          }
-
-          if (isLeftChild) {
+          } else if (isLeftChild) {
             parent.left = p.right;
           } else {
             parent.right = p.right;
@@ -84,9 +82,7 @@ public class BinarySearchTree {
         } else if (p.right == null) {
           if (parent == null) {
             root = p.left;
-          }
-
-          if (isLeftChild) {
+          } else if (isLeftChild) {
             parent.left = p.left;
           } else {
             parent.right = p.left;
@@ -103,11 +99,10 @@ public class BinarySearchTree {
 
           x.right = p.right;
           x.left = p.left;
-          p.right = null;
-          p.left = null;
         }
 
         System.out.println(data + " is deleted");
+        return;
       } else if (result < 0) {
         parent = p;
         isLeftChild = true;
@@ -135,8 +130,8 @@ public class BinarySearchTree {
     return p;
   }
 
-  private String inorder(BinarySearchNode p){
-    if(p == null){
+  private String inorder(BinarySearchNode p) {
+    if (p == null) {
       return "";
     }
 

@@ -20,47 +20,42 @@ class BinaryTreeNode {
   }
 }
 class TreePrinter {
-  /**
-   * Print a tree
-   *
-   * @param root tree root node
-   */
   public void print(BinaryTreeNode root) {
-    List<List<String>> lines = new ArrayList<>();
+    List<List<String>> lines = new ArrayList<>(); // Daftar untuk menyimpan baris-baris pohon
 
-    List<BinaryTreeNode> level = new ArrayList<>();
-    List<BinaryTreeNode> next = new ArrayList<>();
+    List<BinaryTreeNode> level = new ArrayList<>(); // Node pada level saat ini
+    List<BinaryTreeNode> next = new ArrayList<>(); // Node pada level selanjutnya
 
-    level.add(root);
-    int nn = 1;
+    level.add(root); // Menambahkan node akar ke level saat ini
+    int nn = 1; // Jumlah node pada level saat ini
 
-    int widest = 0;
+    int widest = 0; // Lebar label node terlebar
 
     while (nn != 0) {
-      List<String> line = new ArrayList<>();
+      List<String> line = new ArrayList<>(); // Baris pada level saat ini
 
-      nn = 0;
+      nn = 0; // Mengatur ulang jumlah node pada level selanjutnya
 
       for (BinaryTreeNode n : level) {
         if (n == null) {
-          line.add(null);
+          line.add(null); // Menambahkan null ke baris jika node kosong
 
           next.add(null);
           next.add(null);
         } else {
           String aa = n.label;
-          line.add(aa);
-          if (aa.length() > widest) widest = aa.length();
+          line.add(aa); // Menambahkan label node ke baris
+          if (aa.length() > widest) widest = aa.length(); // Memperbarui lebar terlebar
 
           next.add(n.left);
           next.add(n.right);
 
-          if (n.left != null) nn++;
+          if (n.left != null) nn++; // Menghitung jumlah node pada level selanjutnya
           if (n.right != null) nn++;
         }
       }
 
-      lines.add(line);
+      lines.add(line); // Menambahkan baris ke daftar baris
 
       List<BinaryTreeNode> tmp = level;
       level = next;
@@ -68,50 +63,48 @@ class TreePrinter {
       next.clear();
     }
 
-    int perpiece = lines.get(lines.size() - 1).size() * (widest + 1);
+    int perpiece = lines.get(lines.size() - 1).size() * (widest + 1); // Jumlah karakter per bagian pada setiap node pada baris tertentu
     for (int i = 0; i < lines.size(); i++) {
-      List<String> line = lines.get(i);
-      int hpw = (int) Math.floor(perpiece / 2f) - 1;
+      List<String> line = lines.get(i); // Mengambil baris pada level tertentu
+      int hpw = (int) Math.floor(perpiece / 2f) - 1; // Jumlah karakter di setengah bagian per node pada baris tertentu
 
       if (i > 0) {
         for (int j = 0; j < line.size(); j++) {
-          // split node
+          // Membagi node
           char c = ' ';
           if (j % 2 == 1) {
             if (line.get(j - 1) != null) {
-              c = (line.get(j) != null) ? '┴' : '┘';
+              c = (line.get(j) != null) ? '┴' : '┘'; // Tanda pembagi jika node memiliki anak kiri atau tidak
             } else {
-              if (j < line.size() && line.get(j) != null) c = '└';
+              if (j < line.size() && line.get(j) != null) c = '└'; // Tanda pembagi jika node tidak memiliki anak kiri
             }
           }
           System.out.print(c);
 
-          // lines and spaces
+          // Garis dan spasi
           if (line.get(j) == null) {
             for (int k = 0; k < perpiece - 1; k++) {
               System.out.print(" ");
             }
           } else {
             for (int k = 0; k < hpw; k++) {
-              System.out.print(j % 2 == 0 ? " " : "-");
+              System.out.print(j % 2 == 0 ? " " : "-"); // Tanda garis di sekitar node
             }
-            System.out.print(j % 2 == 0 ? "┌" : "┐");
+            System.out.print(j % 2 == 0 ? "┌" : "┐"); // Tanda pembagi di atas node
             for (int k = 0; k < hpw; k++) {
-              System.out.print(j % 2 == 0 ? "-" : " ");
+              System.out.print(j % 2 == 0 ? "-" : " "); // Tanda garis di sekitar node
             }
           }
         }
         System.out.println();
       }
 
-      // print line of numbers
       for (int j = 0; j < line.size(); j++) {
         String f = line.get(j);
         if (f == null) f = "";
-        int gap1 = (int) Math.ceil(perpiece / 2f - f.length() / 2f);
-        int gap2 = (int) Math.floor(perpiece / 2f - f.length() / 2f);
+        int gap1 = (int) Math.ceil(perpiece / 2f - f.length() / 2f); // Jarak di sebelah kiri angka
+        int gap2 = (int) Math.floor(perpiece / 2f - f.length() / 2f); // Jarak di sebelah kanan angka
 
-        // a number
         for (int k = 0; k < gap1; k++) {
           System.out.print(" ");
         }
@@ -122,10 +115,11 @@ class TreePrinter {
       }
       System.out.println();
 
-      perpiece /= 2;
+      perpiece /= 2; // Memperbarui jumlah karakter per bagian untuk baris berikutnya
     }
   }
 }
+
 
 public class TreeKnowledge {
 

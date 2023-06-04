@@ -1,9 +1,116 @@
+import java.util.ArrayList;
+import java.util.List;
+
+class TreePrinter {
+
+  public void print(BinarySearchNode root) {
+    List<List<String>> lines = new ArrayList<>(); // List to store the lines of the tree
+
+    List<BinarySearchNode> level = new ArrayList<>(); // Nodes at the current level
+    List<BinarySearchNode> next = new ArrayList<>(); // Nodes at the next level
+
+    level.add(root); // Add the root node to the current level
+    int nn = 1; // Number of nodes at the current level
+
+    int widest = 0; // Widest label of the nodes
+
+    while (nn != 0) {
+      List<String> line = new ArrayList<>(); // Line at the current level
+
+      nn = 0; // Reset the number of nodes at the next level
+
+      for (BinarySearchNode n : level) {
+        if (n == null) {
+          line.add(null); // Add null to the line if the node is empty
+
+          next.add(null);
+          next.add(null);
+        } else {
+          String aa = String.valueOf(n.data);
+          line.add(aa); // Add the label of the node to the line
+          if (aa.length() > widest) widest = aa.length(); // Update the widest label
+
+          next.add(n.left);
+          next.add(n.right);
+
+          if (n.left != null) nn++; // Count the number of nodes at the next level
+          if (n.right != null) nn++;
+        }
+      }
+
+      lines.add(line); // Add the line to the list of lines
+
+      List<BinarySearchNode> tmp = level;
+      level = next;
+      next = tmp;
+      next.clear();
+    }
+
+    int perpiece = lines.get(lines.size() - 1).size() * (widest + 1); // Number of characters per piece of each node on a specific line
+    for (int i = 0; i < lines.size(); i++) {
+      List<String> line = lines.get(i); // Get the line at a specific level
+      int hpw = (int) Math.floor(perpiece / 2f) - 1; // Number of characters in half a piece per node on a specific line
+
+      if (i > 0) {
+        for (int j = 0; j < line.size(); j++) {
+          // Divide the node
+          char c = ' ';
+          if (j % 2 == 1) {
+            if (line.get(j - 1) != null) {
+              c = (line.get(j) != null) ? '┴' : '┘'; // Divider symbol if the node has a left child or not
+            } else {
+              if (j < line.size() && line.get(j) != null) c = '└'; // Divider symbol if the node doesn't have a left child
+            }
+          }
+          System.out.print(c);
+
+          // Lines and spaces
+          if (line.get(j) == null) {
+            for (int k = 0; k < perpiece - 1; k++) {
+              System.out.print(" ");
+            }
+          } else {
+            for (int k = 0; k < hpw; k++) {
+              System.out.print(j % 2 == 0 ? " " : "-"); // Line symbol around the node
+            }
+            System.out.print(j % 2 == 0 ? "┌" : "┐"); // Divider symbol above the node
+            for (int k = 0; k < hpw; k++) {
+              System.out.print(j % 2 == 0 ? "-" : " "); // Line symbol around the node
+            }
+          }
+        }
+        System.out.println();
+      }
+
+      for (int j = 0; j < line.size(); j++) {
+        String f = line.get(j);
+        if (f == null) f = "";
+        int gap1 = (int) Math.ceil(perpiece / 2f - f.length() / 2f); // Gap on the left of the number
+        int gap2 = (int) Math.floor(perpiece / 2f - f.length() / 2f); // Gap on the right of the number
+
+        for (int k = 0; k < gap1; k++) {
+          System.out.print(" ");
+        }
+        System.out.print(f);
+        for (int k = 0; k < gap2; k++) {
+          System.out.print(" ");
+        }
+      }
+      System.out.println();
+
+      perpiece /= 2; // Update the number of characters per piece for the next line
+    }
+  }
+}
+
 public class BinarySearchTree {
 
   private BinarySearchNode root;
+  private TreePrinter treePrinter;
 
   BinarySearchTree() {
     root = null;
+    treePrinter = new TreePrinter();
   }
 
   public void insert(Integer data) {
@@ -35,6 +142,9 @@ public class BinarySearchTree {
     } else {
       parent.right = newNode;
     }
+
+    treePrinter.print(this.root);
+    System.out.println("");
   }
 
   public void search(Integer data) {
@@ -102,6 +212,8 @@ public class BinarySearchTree {
         }
 
         System.out.println(data + " is deleted");
+        treePrinter.print(this.root);
+        System.out.println("");
         return;
       } else if (result < 0) {
         parent = p;
@@ -117,7 +229,7 @@ public class BinarySearchTree {
     System.out.println(data + " is not found");
   }
 
-  public String toString() {
+  public String toInteger() {
     return inorder(root);
   }
 
